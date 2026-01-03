@@ -11,9 +11,8 @@ export function SummaryCards() {
   const { transactions, currentMonth } = useFinanceStore();
 
   const stats = useMemo(() => {
-    const monthTransactions = transactions.filter(
-      (t) => t.month === currentMonth && !t.is_predicted
-    );
+    // All transactions for the month (including predicted/recurring)
+    const monthTransactions = transactions.filter((t) => t.month === currentMonth);
 
     const income = monthTransactions
       .filter((t) => t.type === 'income')
@@ -25,23 +24,10 @@ export function SummaryCards() {
 
     const balance = income - expense;
 
-    // Include predicted for projected values
-    const allTransactions = transactions.filter((t) => t.month === currentMonth);
-    const projectedIncome = allTransactions
-      .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + t.value, 0);
-    const projectedExpense = allTransactions
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + t.value, 0);
-    const projectedBalance = projectedIncome - projectedExpense;
-
     return {
       income,
       expense,
       balance,
-      projectedIncome,
-      projectedExpense,
-      projectedBalance,
     };
   }, [transactions, currentMonth]);
 
@@ -52,11 +38,7 @@ export function SummaryCards() {
           icon={<FiDollarSign size={24} />}
           title="Saldo"
           value={formatCurrency(stats.balance)}
-          subtitle={
-            stats.balance !== stats.projectedBalance
-              ? `Projetado: ${formatCurrency(stats.projectedBalance)}`
-              : 'Saldo atual do mês'
-          }
+          subtitle="Saldo do mês"
           variant="balance"
         />
       </Col>
@@ -66,11 +48,7 @@ export function SummaryCards() {
           icon={<FiTrendingUp size={24} />}
           title="Receitas"
           value={formatCurrency(stats.income)}
-          subtitle={
-            stats.income !== stats.projectedIncome
-              ? `Projetado: ${formatCurrency(stats.projectedIncome)}`
-              : 'Total de receitas'
-          }
+          subtitle="Total de receitas"
           variant="income"
         />
       </Col>
@@ -80,11 +58,7 @@ export function SummaryCards() {
           icon={<FiTrendingDown size={24} />}
           title="Despesas"
           value={formatCurrency(stats.expense)}
-          subtitle={
-            stats.expense !== stats.projectedExpense
-              ? `Projetado: ${formatCurrency(stats.projectedExpense)}`
-              : 'Total de despesas'
-          }
+          subtitle="Total de despesas"
           variant="expense"
         />
       </Col>
