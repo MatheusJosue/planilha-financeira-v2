@@ -147,7 +147,7 @@ export default function RecorrentesPage() {
               {CATEGORY_EMOJIS[recurring.category] || '📦'} {recurring.category}
             </small>
             <small style={{ color: 'var(--text-hint)' }}>•</small>
-            <small style={{ color: 'var(--text-hint)' }}>
+            <small className="d-inline-flex align-items-center" style={{ color: 'var(--text-hint)' }}>
               <FiCalendar size={12} className="me-1" />
               Dia {recurring.day_of_month}
             </small>

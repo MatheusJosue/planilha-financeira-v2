@@ -113,7 +113,7 @@ export default function TransacoesPage() {
               }}
             >
               <div className="d-flex align-items-center justify-content-between mb-2">
-                <h6 className="mb-0" style={{ color: 'var(--income-color)' }}>
+                <h6 className="mb-0 d-flex align-items-center" style={{ color: 'var(--income-color)' }}>
                   <FiCalendar className="me-2" />
                   Período 1 (Dia 1-{period1End})
                 </h6>
@@ -153,7 +153,7 @@ export default function TransacoesPage() {
               }}
             >
               <div className="d-flex align-items-center justify-content-between mb-2">
-                <h6 className="mb-0" style={{ color: 'var(--accent-blue)' }}>
+                <h6 className="mb-0 d-flex align-items-center" style={{ color: 'var(--accent-blue)' }}>
                   <FiCalendar className="me-2" />
                   Período 2 (Dia {period1End + 1}-fim)
                 </h6>

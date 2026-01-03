@@ -265,7 +265,7 @@ export default function OrcamentoPage() {
 
                 <div className="mb-3">
                   <div className="d-flex justify-content-between mb-2">
-                    <span style={{ color: 'var(--text-muted)' }}>
+                    <span className="d-flex align-items-center" style={{ color: 'var(--text-muted)' }}>
                       {budget.status === 'exceeded' && (
                         <FiAlertTriangle
                           size={14}

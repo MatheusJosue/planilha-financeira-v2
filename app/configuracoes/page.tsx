@@ -154,7 +154,7 @@ export default function ConfiguracoesPage() {
         <>
           {/* Add Category */}
           <GlassCard className="mb-4">
-            <h5 className="mb-3" style={{ color: 'var(--text-primary)' }}>
+            <h5 className="mb-3 d-flex align-items-center" style={{ color: 'var(--text-primary)' }}>
               <FiPlus className="me-2" />
               Nova Categoria
             </h5>
@@ -186,7 +186,7 @@ export default function ConfiguracoesPage() {
 
           {/* Categories List */}
           <GlassCard>
-            <h5 className="mb-3" style={{ color: 'var(--text-primary)' }}>
+            <h5 className="mb-3 d-flex align-items-center" style={{ color: 'var(--text-primary)' }}>
               <FiTag className="me-2" />
               Gerenciar Categorias
             </h5>
@@ -242,7 +242,7 @@ export default function ConfiguracoesPage() {
         <>
           {/* Period Settings */}
           <GlassCard className="mb-4">
-            <h5 className="mb-3" style={{ color: 'var(--text-primary)' }}>
+            <h5 className="mb-3 d-flex align-items-center" style={{ color: 'var(--text-primary)' }}>
               <FiCalendar className="me-2" />
               Divisão por Períodos
             </h5>
@@ -382,7 +382,7 @@ export default function ConfiguracoesPage() {
         <>
           {/* User Info */}
           <GlassCard className="mb-4">
-            <h5 className="mb-3" style={{ color: 'var(--text-primary)' }}>
+            <h5 className="mb-3 d-flex align-items-center" style={{ color: 'var(--text-primary)' }}>
               <FiUser className="me-2" />
               Informações da Conta
             </h5>
