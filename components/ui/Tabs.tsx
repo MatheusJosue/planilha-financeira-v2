@@ -26,7 +26,7 @@ export function GlassTabs({
   fullWidth = false,
   className = '',
 }: GlassTabsProps) {
-  const baseClasses = 'flex gap-1 p-1 rounded-xl';
+  const baseClasses = 'flex gap-1 p-1 rounded-xl overflow-x-auto';
 
   const variantContainerClasses = {
     default: 'glass-card-static',
@@ -35,7 +35,7 @@ export function GlassTabs({
   };
 
   const getTabClasses = (isActive: boolean) => {
-    const baseTabClasses = 'px-4 py-2.5 text-sm font-medium transition-all duration-250 flex items-center gap-2';
+    const baseTabClasses = 'px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-medium transition-all duration-250 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap flex-shrink-0';
 
     if (variant === 'default') {
       return `${baseTabClasses} rounded-lg ${
@@ -70,8 +70,12 @@ export function GlassTabs({
         ${baseClasses}
         ${variantContainerClasses[variant]}
         ${fullWidth ? 'w-full' : 'inline-flex'}
+        hide-scrollbar
         ${className}
       `}
+      style={{
+        WebkitOverflowScrolling: 'touch',
+      }}
     >
       {tabs.map((tab) => (
         <button

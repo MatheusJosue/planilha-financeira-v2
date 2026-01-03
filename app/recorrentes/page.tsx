@@ -250,7 +250,7 @@ export default function RecorrentesPage() {
       }
     >
       {/* Summary Cards */}
-      <Row className="mb-4">
+      <Row className="mb-4 g-3">
         <Col md={4}>
           <GlassCard className="p-3">
             <div className="d-flex align-items-center gap-3">

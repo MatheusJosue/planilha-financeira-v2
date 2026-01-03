@@ -292,44 +292,86 @@ export default function MetasPage() {
       }
     >
       {/* Summary */}
-      <Row className="mb-4">
+      <Row className="mb-4 g-3">
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>🎯</div>
-            <h3 className="mb-0" style={{ color: 'var(--text-primary)' }}>
-              {goals.length}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Metas Ativas</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--glass-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                🎯
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Metas Ativas</small>
+                <h4 className="mb-0" style={{ color: 'var(--text-primary)' }}>
+                  {goals.length}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>💰</div>
-            <h3 className="mb-0" style={{ color: 'var(--income-color)' }}>
-              {formatCurrency(goals.reduce((sum, g) => sum + g.current_value, 0))}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Total Acumulado</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--income-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                💰
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Total Acumulado</small>
+                <h4 className="mb-0" style={{ color: 'var(--income-color)' }}>
+                  {formatCurrency(goals.reduce((sum, g) => sum + g.current_value, 0))}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>🏆</div>
-            <h3 className="mb-0" style={{ color: 'var(--text-primary)' }}>
-              {goals.filter((g) => g.current_value >= g.target_value).length}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Metas Alcançadas</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--glass-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                🏆
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Metas Alcançadas</small>
+                <h4 className="mb-0" style={{ color: 'var(--text-primary)' }}>
+                  {goals.filter((g) => g.current_value >= g.target_value).length}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
       </Row>
 
       {/* Goals Grid */}
-      <Row>
+      <Row className="g-4">
         {goals.map((goal) => {
           const percentage = getProgressPercentage(goal);
           const remaining = goal.target_value - goal.current_value;
 
           return (
-            <Col key={goal.id} lg={6} className="mb-4">
+            <Col key={goal.id} lg={6}>
               <GlassCard>
                 <div className="d-flex align-items-start justify-content-between mb-3">
                   <div className="d-flex align-items-center gap-3">

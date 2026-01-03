@@ -104,7 +104,7 @@ export default function TransacoesPage() {
 
       {/* Period Summary Cards (when enabled) */}
       {periodEnabled && periodTotals && periodFilter === 'all' && (
-        <Row className="mb-4">
+        <Row className="mb-4 g-3">
           <Col md={6}>
             <GlassCard
               className="p-3"
@@ -189,7 +189,7 @@ export default function TransacoesPage() {
       )}
 
       {/* Summary Cards */}
-      <Row className="mb-4">
+      <Row className="mb-4 g-3">
         <Col md={4}>
           <GlassCard className="p-3">
             <div className="d-flex align-items-center gap-3">

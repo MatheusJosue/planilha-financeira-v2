@@ -169,42 +169,84 @@ export default function OrcamentoPage() {
       <MonthSelector />
 
       {/* Summary Cards */}
-      <Row className="mb-4">
+      <Row className="mb-4 g-3">
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>💰</div>
-            <h3 className="mb-0" style={{ color: 'var(--text-primary)' }}>
-              {formatCurrency(totalBudget)}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Orçamento Total</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--glass-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                💰
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Orçamento Total</small>
+                <h4 className="mb-0" style={{ color: 'var(--text-primary)' }}>
+                  {formatCurrency(totalBudget)}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>📊</div>
-            <h3
-              className="mb-0"
-              style={{
-                color: totalSpent > totalBudget ? 'var(--expense-color)' : 'var(--income-color)',
-              }}
-            >
-              {formatCurrency(totalSpent)}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Total Gasto</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: totalSpent > totalBudget ? 'var(--expense-bg)' : 'var(--income-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                📊
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Total Gasto</small>
+                <h4
+                  className="mb-0"
+                  style={{
+                    color: totalSpent > totalBudget ? 'var(--expense-color)' : 'var(--income-color)',
+                  }}
+                >
+                  {formatCurrency(totalSpent)}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
         <Col md={4}>
-          <GlassCard className="text-center p-4">
-            <div style={{ fontSize: '2rem' }}>{exceededCount > 0 ? '⚠️' : '✅'}</div>
-            <h3
-              className="mb-0"
-              style={{
-                color: exceededCount > 0 ? 'var(--expense-color)' : 'var(--income-color)',
-              }}
-            >
-              {exceededCount}
-            </h3>
-            <small style={{ color: 'var(--text-muted)' }}>Orçamentos Excedidos</small>
+          <GlassCard className="p-3">
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  background: exceededCount > 0 ? 'var(--expense-bg)' : 'var(--income-bg)',
+                  fontSize: '1.5rem',
+                }}
+              >
+                {exceededCount > 0 ? '⚠️' : '✅'}
+              </div>
+              <div>
+                <small style={{ color: 'var(--text-muted)' }}>Orçamentos Excedidos</small>
+                <h4
+                  className="mb-0"
+                  style={{
+                    color: exceededCount > 0 ? 'var(--expense-color)' : 'var(--income-color)',
+                  }}
+                >
+                  {exceededCount}
+                </h4>
+              </div>
+            </div>
           </GlassCard>
         </Col>
       </Row>
@@ -214,9 +256,9 @@ export default function OrcamentoPage() {
           <NoBudgetsEmpty onAdd={() => handleOpenForm()} />
         </GlassCard>
       ) : (
-        <Row>
+        <Row className="g-4">
           {budgetStatus.map((budget) => (
-            <Col key={budget.id} lg={6} className="mb-4">
+            <Col key={budget.id} lg={6}>
               <GlassCard>
                 <div className="d-flex align-items-start justify-content-between mb-3">
                   <div className="d-flex align-items-center gap-3">
