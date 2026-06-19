@@ -143,7 +143,7 @@ export function TransactionList({
     const nextMonth = getNextMonth(currentMonth);
     const formattedNextMonth = formatDuplicateMonth(nextMonth);
     const result = await showConfirm(
-      'Duplicar para prÃ³ximo mÃªs?',
+      'Duplicar para próximo mês?',
       `Deseja duplicar "${transaction.description}" para ${formattedNextMonth}?`
     );
     if (result.isConfirmed) {
@@ -160,7 +160,7 @@ export function TransactionList({
         value: transaction.value,
         date: newDate.toISOString().split('T')[0],
       });
-      showSuccess(`TransaÃ§Ã£o duplicada para ${formattedNextMonth}!`);
+      showSuccess(`Transação duplicada para ${formattedNextMonth}!`);
     }
   };
 
