@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import { FiEdit, FiTrash2, FiCheck, FiTrendingUp, FiTrendingDown, FiCopy, FiRepeat } from 'react-icons/fi';
 import { useFinanceStore } from '@/store/financeStore';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { formatDate, formatMonthNumeric, getNextMonth } from '@/utils/formatDate';
+import { formatDate, getNextMonth } from '@/utils/formatDate';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { IconButton } from '@/components/ui/GlassButton';
 import { StatusBadge } from '@/components/ui/Badge';
@@ -33,6 +33,7 @@ export function TransactionList({
 }: TransactionListProps) {
   const {
     transactions,
+    recurringTransactions,
     currentMonth,
     deleteTransaction,
     togglePaymentStatus,
@@ -57,6 +58,28 @@ export function TransactionList({
     } else {
       return day > period1End;
     }
+  };
+
+  const formatDuplicateMonth = (month: string) => {
+    const [year, monthNumber] = month.split('-');
+    return year && monthNumber ? `${monthNumber}/${year}` : month;
+  };
+
+  const isRecurringTransaction = (transaction: Transaction) => {
+    if (transaction.recurring_id || transaction.is_predicted) {
+      return true;
+    }
+
+    const transactionDay = getDayFromDate(transaction.date);
+
+    return recurringTransactions.some(
+      (recurring) =>
+        recurring.is_active &&
+        recurring.description === transaction.description &&
+        recurring.type === transaction.type &&
+        recurring.category === transaction.category &&
+        recurring.day_of_month === transactionDay
+    );
   };
 
   const filteredTransactions = useMemo(() => {
@@ -115,10 +138,10 @@ export function TransactionList({
   };
 
   const handleDuplicateToNextMonth = async (transaction: Transaction) => {
-    if (transaction.recurring_id) return;
+    if (isRecurringTransaction(transaction)) return;
 
     const nextMonth = getNextMonth(currentMonth);
-    const formattedNextMonth = formatMonthNumeric(nextMonth);
+    const formattedNextMonth = formatDuplicateMonth(nextMonth);
     const result = await showConfirm(
       'Duplicar para prÃ³ximo mÃªs?',
       `Deseja duplicar "${transaction.description}" para ${formattedNextMonth}?`
@@ -142,7 +165,7 @@ export function TransactionList({
   };
 
   const renderTransaction = (transaction: Transaction) => {
-    const canDuplicate = !transaction.recurring_id;
+    const canDuplicate = !isRecurringTransaction(transaction);
 
     return (
     <div

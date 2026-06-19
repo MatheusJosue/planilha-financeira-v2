@@ -1,7 +1,7 @@
-const CACHE_VERSION = 'planilha-financeira-v2-1';
+const CACHE_VERSION = 'planilha-financeira-v2-2';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
-const APP_SHELL = ['/icon-192.png', '/icon-512.png'];
+const APP_SHELL = ['/sheet-icon-192.png', '/sheet-icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

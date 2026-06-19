@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   description: 'Gerencie suas finanças pessoais de forma simples e eficiente',
   keywords: ['finanças', 'planilha', 'controle financeiro', 'orçamento', 'metas'],
   authors: [{ name: 'Planilha Financeira' }],
-  manifest: '/manifest.webmanifest',
+  manifest: '/manifest.webmanifest?v=2',
   icons: {
     icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/sheet-icon.svg', type: 'image/svg+xml' },
+      { url: '/sheet-icon-192.png', sizes: '192x192', type: 'image/png' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: '/sheet-apple-touch-icon.png',
   },
   appleWebApp: {
     capable: true,
