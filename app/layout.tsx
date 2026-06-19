@@ -22,11 +22,20 @@ export const metadata: Metadata = {
   description: 'Gerencie suas finanças pessoais de forma simples e eficiente',
   keywords: ['finanças', 'planilha', 'controle financeiro', 'orçamento', 'metas'],
   authors: [{ name: 'Planilha Financeira' }],
-  manifest: '/manifest.json',
+  manifest: '/manifest.webmanifest',
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
     apple: '/apple-touch-icon.png',
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Financeira',
+  },
+  applicationName: 'Planilha Financeira',
 };
 
 export default function RootLayout({

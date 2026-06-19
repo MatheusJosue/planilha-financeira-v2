@@ -1,11 +1,11 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FiEdit, FiTrash2, FiCheck, FiTrendingUp, FiTrendingDown, FiCopy, FiRepeat } from 'react-icons/fi';
 import { useFinanceStore } from '@/store/financeStore';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { formatDate, getNextMonth } from '@/utils/formatDate';
+import { formatDate, formatMonthNumeric, getNextMonth } from '@/utils/formatDate';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { IconButton } from '@/components/ui/GlassButton';
 import { StatusBadge } from '@/components/ui/Badge';
@@ -106,7 +106,7 @@ export function TransactionList({
 
   const handleConfirmPredicted = async (transaction: Transaction) => {
     const result = await showConfirm(
-      'Confirmar transação?',
+      'Confirmar transaÃ§Ã£o?',
       `Deseja confirmar "${transaction.description}" como realizada?`
     );
     if (result.isConfirmed) {
@@ -115,10 +115,13 @@ export function TransactionList({
   };
 
   const handleDuplicateToNextMonth = async (transaction: Transaction) => {
+    if (transaction.recurring_id) return;
+
     const nextMonth = getNextMonth(currentMonth);
+    const formattedNextMonth = formatMonthNumeric(nextMonth);
     const result = await showConfirm(
-      'Duplicar para próximo mês?',
-      `Deseja duplicar "${transaction.description}" para ${nextMonth}?`
+      'Duplicar para prÃ³ximo mÃªs?',
+      `Deseja duplicar "${transaction.description}" para ${formattedNextMonth}?`
     );
     if (result.isConfirmed) {
       // Calculate new date in next month
@@ -134,11 +137,14 @@ export function TransactionList({
         value: transaction.value,
         date: newDate.toISOString().split('T')[0],
       });
-      showSuccess(`Transação duplicada para ${nextMonth}!`);
+      showSuccess(`TransaÃ§Ã£o duplicada para ${formattedNextMonth}!`);
     }
   };
 
-  const renderTransaction = (transaction: Transaction) => (
+  const renderTransaction = (transaction: Transaction) => {
+    const canDuplicate = !transaction.recurring_id;
+
+    return (
     <div
       key={transaction.id}
       className={`
@@ -199,9 +205,9 @@ export function TransactionList({
           </div>
           <div className="d-flex align-items-center gap-2 flex-wrap">
             <small style={{ color: 'var(--text-muted)' }}>
-              {CATEGORY_EMOJIS[transaction.category] || '📦'} {transaction.category}
+              {CATEGORY_EMOJIS[transaction.category] || 'ðŸ“¦'} {transaction.category}
             </small>
-            <small style={{ color: 'var(--text-hint)' }}>•</small>
+            <small style={{ color: 'var(--text-hint)' }}>â€¢</small>
             <small style={{ color: 'var(--text-hint)' }}>{formatDate(transaction.date)}</small>
           </div>
         </div>
@@ -246,13 +252,15 @@ export function TransactionList({
               />
             </>
           )}
-          <IconButton
-            icon={<FiRepeat size={16} />}
-            variant="primary"
-            size="sm"
-            onClick={() => handleDuplicateToNextMonth(transaction)}
-            tooltip="Duplicar p/ próximo mês"
-          />
+          {canDuplicate && (
+            <IconButton
+              icon={<FiRepeat size={16} />}
+              variant="primary"
+              size="sm"
+              onClick={() => handleDuplicateToNextMonth(transaction)}
+              tooltip="Duplicar p/ próximo mês"
+            />
+          )}
           <IconButton
             icon={<FiTrash2 size={16} />}
             variant="danger"
@@ -303,13 +311,15 @@ export function TransactionList({
               />
             </>
           )}
-          <IconButton
-            icon={<FiRepeat size={16} />}
-            variant="primary"
-            size="sm"
-            onClick={() => handleDuplicateToNextMonth(transaction)}
-            tooltip="Duplicar p/ próximo mês"
-          />
+          {canDuplicate && (
+            <IconButton
+              icon={<FiRepeat size={16} />}
+              variant="primary"
+              size="sm"
+              onClick={() => handleDuplicateToNextMonth(transaction)}
+              tooltip="Duplicar p/ próximo mês"
+            />
+          )}
           <IconButton
             icon={<FiTrash2 size={16} />}
             variant="danger"
@@ -321,6 +331,7 @@ export function TransactionList({
       </div>
     </div>
   );
+  };
 
   if (filteredTransactions.length === 0) {
     return (

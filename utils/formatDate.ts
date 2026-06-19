@@ -47,6 +47,15 @@ export function formatMonthShort(month: string): string {
 }
 
 /**
+ * Format a month string to numeric format (MM/YYYY)
+ */
+export function formatMonthNumeric(month: string): string {
+  const date = parseISO(`${month}-01`);
+  if (!isValid(date)) return month;
+  return format(date, 'MM/yyyy', { locale: ptBR });
+}
+
+/**
  * Get current month in YYYY-MM format
  */
 export function getCurrentMonth(): string {

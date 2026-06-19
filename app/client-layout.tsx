@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Navigation } from '@/components/Navigation';
+import { PWAServiceWorker } from '@/components/PWAServiceWorker';
 import { useAuth } from '@/hooks/useAuth';
 import { useFinanceStore } from '@/store/financeStore';
-import { DashboardSkeleton } from '@/components/ui/Skeleton';
 
 // Routes that don't need the navigation bar
 const publicRoutes = ['/login', '/auth/callback', '/auth/reset-password'];
@@ -38,6 +38,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   if (authLoading || (user && initialLoading && !isPublicRoute)) {
     return (
       <ThemeProvider>
+        <PWAServiceWorker />
         <div
           className="min-h-screen flex items-center justify-content-center"
           style={{ background: 'var(--bg-gradient)' }}
@@ -72,6 +73,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider>
+      <PWAServiceWorker />
       {showNavigation && <Navigation />}
       {children}
     </ThemeProvider>
