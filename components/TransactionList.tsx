@@ -129,7 +129,7 @@ export function TransactionList({
 
   const handleConfirmPredicted = async (transaction: Transaction) => {
     const result = await showConfirm(
-      'Confirmar transaÃ§Ã£o?',
+      'Confirmar transação?',
       `Deseja confirmar "${transaction.description}" como realizada?`
     );
     if (result.isConfirmed) {
@@ -228,9 +228,9 @@ export function TransactionList({
           </div>
           <div className="d-flex align-items-center gap-2 flex-wrap">
             <small style={{ color: 'var(--text-muted)' }}>
-              {CATEGORY_EMOJIS[transaction.category] || 'ðŸ“¦'} {transaction.category}
+              {CATEGORY_EMOJIS[transaction.category] || '📦'} {transaction.category}
             </small>
-            <small style={{ color: 'var(--text-hint)' }}>â€¢</small>
+            <small style={{ color: 'var(--text-hint)' }}>•</small>
             <small style={{ color: 'var(--text-hint)' }}>{formatDate(transaction.date)}</small>
           </div>
         </div>
