@@ -2,153 +2,108 @@
 
 import { useMemo } from 'react';
 import {
-  BarChart,
-  Bar,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from 'recharts';
+import { FiActivity } from 'react-icons/fi';
 import { useFinanceStore } from '@/store/financeStore';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatMonthShort } from '@/utils/formatDate';
 import { ChartCard } from '@/components/ui/GlassCard';
 import { NoDataEmpty } from '@/components/ui/EmptyState';
 
-interface CustomTooltipProps {
+interface BalanceTooltipProps {
   active?: boolean;
-  payload?: Array<{
-    name: string;
-    value: number;
-    color: string;
-  }>;
+  payload?: Array<{ value: number }>;
   label?: string;
 }
 
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="glass-card-static p-3" style={{ minWidth: '160px' }}>
-        <p className="fw-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-          {label}
-        </p>
-        {payload.map((entry) => (
-          <p
-            key={entry.name}
-            className="mb-1 d-flex justify-content-between"
-            style={{ color: entry.color }}
-          >
-            <span>{entry.name}:</span>
-            <span className="fw-semibold">{formatCurrency(entry.value)}</span>
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
+function BalanceTooltip({ active, payload, label }: BalanceTooltipProps) {
+  if (!active || !payload?.length) return null;
+
+  const balance = payload[0].value;
+  return (
+    <div className="balance-chart-tooltip">
+      <span>{label}</span>
+      <strong className={balance >= 0 ? 'is-positive' : 'is-negative'}>
+        {formatCurrency(balance)}
+      </strong>
+    </div>
+  );
+}
 
 export function IncomeVsExpenseChart() {
   const { monthsData, transactions, currentMonth } = useFinanceStore();
 
   const data = useMemo(() => {
-    // Get all months including current month
     const allMonths = new Set(Object.keys(monthsData));
     allMonths.add(currentMonth);
 
-    const months = Array.from(allMonths).sort().slice(-6); // Last 6 months
-
-    return months.map((month) => {
-      // Use transactions state for current month, monthsData for others
-      // Include all transactions (real and predicted)
-      let monthTransactions: typeof transactions = [];
-      if (month === currentMonth) {
-        monthTransactions = transactions;
-      } else {
-        monthTransactions = monthsData[month]?.transactions || [];
-      }
-
+    return Array.from(allMonths).sort().slice(-6).map((month) => {
+      const monthTransactions = month === currentMonth
+        ? transactions
+        : monthsData[month]?.transactions || [];
       const income = monthTransactions
-        .filter((t) => t.type === 'income')
-        .reduce((sum, t) => sum + t.value, 0);
-
+        .filter((transaction) => transaction.type === 'income')
+        .reduce((sum, transaction) => sum + transaction.value, 0);
       const expense = monthTransactions
-        .filter((t) => t.type === 'expense')
-        .reduce((sum, t) => sum + t.value, 0);
+        .filter((transaction) => transaction.type === 'expense')
+        .reduce((sum, transaction) => sum + transaction.value, 0);
 
-      return {
-        month: formatMonthShort(month),
-        Receitas: income,
-        Despesas: expense,
-      };
+      return { month: formatMonthShort(month), balance: income - expense };
     });
   }, [monthsData, transactions, currentMonth]);
 
-  if (data.length === 0 || data.every((d) => d.Receitas === 0 && d.Despesas === 0)) {
+  if (data.length === 0 || data.every((item) => item.balance === 0)) {
     return (
-      <ChartCard title="Receitas vs Despesas" icon="📈">
+      <ChartCard title="Evolução do saldo" icon={<FiActivity />} className="balance-evolution-card">
         <NoDataEmpty />
       </ChartCard>
     );
   }
 
+  const firstBalance = data[0]?.balance || 0;
+  const lastBalance = data.at(-1)?.balance || 0;
+  const trend = lastBalance - firstBalance;
+
   return (
     <ChartCard
-      title="Receitas vs Despesas"
-      icon="📈"
-      description="Comparativo dos últimos meses"
+      title="Evolução do saldo"
+      icon={<FiActivity />}
+      description="Resultado líquido dos últimos meses"
+      className="balance-evolution-card"
+      action={
+        <span className={`balance-trend ${trend >= 0 ? 'is-positive' : 'is-negative'}`}>
+          {trend >= 0 ? '↗' : '↘'} {formatCurrency(Math.abs(trend))}
+        </span>
+      }
     >
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} barGap={8}>
+      <ResponsiveContainer width="100%" height={210}>
+        <AreaChart data={data} margin={{ top: 12, right: 4, left: 4, bottom: 0 }}>
           <defs>
-            <linearGradient id="colorReceitas" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#38ef7d" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#11998e" stopOpacity={0.7} />
-            </linearGradient>
-            <linearGradient id="colorDespesas" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f45c43" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#eb3349" stopOpacity={0.7} />
+            <linearGradient id="balanceArea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#667eea" stopOpacity={0.34} />
+              <stop offset="100%" stopColor="#667eea" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="var(--glass-border)"
-            vertical={false}
+          <CartesianGrid strokeDasharray="3 6" stroke="var(--glass-border)" vertical={false} />
+          <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+          <YAxis hide domain={['auto', 'auto']} />
+          <Tooltip content={<BalanceTooltip />} cursor={{ stroke: 'var(--glass-border)' }} />
+          <Area
+            type="monotone"
+            dataKey="balance"
+            stroke="#7b8ff5"
+            strokeWidth={2.5}
+            fill="url(#balanceArea)"
+            activeDot={{ r: 5, fill: '#7b8ff5', stroke: 'var(--text-primary)', strokeWidth: 2 }}
           />
-          <XAxis
-            dataKey="month"
-            stroke="var(--text-muted)"
-            tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
-            axisLine={{ stroke: 'var(--glass-border)' }}
-          />
-          <YAxis
-            stroke="var(--text-muted)"
-            tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
-            axisLine={{ stroke: 'var(--glass-border)' }}
-            tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-          />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--glass-bg)' }} />
-          <Legend
-            wrapperStyle={{ paddingTop: '20px' }}
-            formatter={(value) => (
-              <span style={{ color: 'var(--text-secondary)' }}>{value}</span>
-            )}
-          />
-          <Bar
-            dataKey="Receitas"
-            fill="url(#colorReceitas)"
-            radius={[8, 8, 0, 0]}
-            maxBarSize={50}
-          />
-          <Bar
-            dataKey="Despesas"
-            fill="url(#colorDespesas)"
-            radius={[8, 8, 0, 0]}
-            maxBarSize={50}
-          />
-        </BarChart>
+        </AreaChart>
       </ResponsiveContainer>
     </ChartCard>
   );

@@ -59,6 +59,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
           <Form.Control
             ref={ref}
             id={id}
+            className="input-glass"
             type="text"
             inputMode="decimal"
             value={value}

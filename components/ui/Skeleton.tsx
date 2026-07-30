@@ -110,4 +110,26 @@ export function DashboardSkeleton() {
   );
 }
 
+function SkeletonHero() {
+  return <div className="page-skeleton-hero"><div><Skeleton width={150} height={10} className="mb-3" /><Skeleton width={260} height={42} className="mb-3" /><Skeleton width="min(440px, 80vw)" height={14} /></div><div className="d-flex gap-2"><Skeleton width={180} height={42} variant="rounded" /><Skeleton width={145} height={42} variant="rounded" /></div></div>;
+}
+
+function SkeletonPulse({ stats = 3 }: { stats?: number }) {
+  return <div className="page-skeleton-pulse"><div className="d-flex align-items-center gap-3"><Skeleton width={50} height={50} variant="rounded" /><div><Skeleton width={120} height={10} className="mb-2" /><Skeleton width={190} height={30} /></div></div><div className="page-skeleton-pulse-stats">{Array.from({ length: stats }).map((_, index) => <div key={index}><Skeleton width={70} height={9} className="mb-2" /><Skeleton width={105} height={20} /></div>)}</div></div>;
+}
+
+function SkeletonToolbar() {
+  return <div className="page-skeleton-toolbar"><div><Skeleton width={90} height={9} className="mb-2" /><Skeleton width={180} height={20} /></div><div className="d-flex gap-2 flex-wrap justify-content-end"><Skeleton width={210} height={42} variant="rounded" /><Skeleton width={150} height={42} variant="rounded" /><Skeleton width={150} height={42} variant="rounded" /></div></div>;
+}
+
+function SkeletonGrid({ count = 8, compact = false }: { count?: number; compact?: boolean }) {
+  return <div className="page-skeleton-grid">{Array.from({ length: count }).map((_, index) => <div className="page-skeleton-card" key={index}><div className="d-flex align-items-center gap-3"><Skeleton width={38} height={38} variant="rounded" /><div className="flex-grow-1"><Skeleton width="70%" height={13} className="mb-2" /><Skeleton width="45%" height={9} /></div><Skeleton width={62} height={16} /></div>{!compact && <><Skeleton width="100%" height={6} variant="rounded" className="my-3" /><div className="d-flex justify-content-between"><Skeleton width={80} height={12} /><Skeleton width={70} height={12} /></div></>}</div>)}</div>;
+}
+
+export function PageSkeleton({ pathname }: { pathname: string }) {
+  const records = pathname.startsWith('/transacoes') || pathname.startsWith('/recorrentes');
+  const settings = pathname.startsWith('/configuracoes');
+  return <main className="main-content page-skeleton"><div className="container-fluid px-3 px-lg-4"><SkeletonHero />{!settings && <SkeletonPulse stats={pathname === '/' ? 3 : 2} />}{settings ? <div className="page-skeleton-settings"><Skeleton width={220} height={24} className="mb-4" />{Array.from({ length: 5 }).map((_, index) => <div key={index} className="mb-4"><Skeleton width={130} height={11} className="mb-2" /><Skeleton width="100%" height={44} variant="rounded" /></div>)}</div> : <div className="page-skeleton-section"><SkeletonToolbar /><SkeletonGrid count={pathname === '/' ? 6 : 8} compact={records} /></div>}</div></main>;
+}
+
 export default Skeleton;

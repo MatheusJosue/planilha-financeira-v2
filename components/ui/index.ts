@@ -2,7 +2,6 @@
 export { GlassCard, SummaryCard, ChartCard } from './GlassCard';
 export { GlassButton, IconButton, FloatingActionButton } from './GlassButton';
 export { GlassInput, GlassTextarea } from './GlassInput';
-export { GlassSelect } from './GlassSelect';
 export { GlassModal } from './Modal';
 export { GlassTabs, TabPanel, TabsWithPanels } from './Tabs';
 

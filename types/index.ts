@@ -40,6 +40,7 @@ export interface RecurringTransaction {
   total_installments?: number;
   current_installment?: number;
   is_active: boolean;
+  is_essential: boolean;
   selected_income_id?: string;
   created_at?: string;
 }
@@ -198,6 +199,7 @@ export interface FinanceStore extends FinanceData {
   createNewMonth: (month: string, copyFromPrevious?: boolean) => Promise<void>;
   getAvailableMonths: () => string[];
   addTransaction: (transaction: Omit<Transaction, 'id' | 'user_id' | 'month'>) => Promise<void>;
+  duplicateNonRecurringTransactionsToNextMonth: () => Promise<number>;
   updateTransaction: (id: string, updates: Partial<Transaction>) => Promise<void>;
   deleteTransaction: (id: string, isPredicted?: boolean) => Promise<void>;
   togglePaymentStatus: (id: string) => Promise<void>;

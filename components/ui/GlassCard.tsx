@@ -89,17 +89,17 @@ export function SummaryCard({
 
   return (
     <div className={`${variantClasses[variant]} ${className}`}>
-      <div className="flex items-center gap-3 mb-3">
-        <div className="text-2xl opacity-80">{icon}</div>
-        <span className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
+      <div className="summary-card-heading">
+        <div className="summary-card-icon">{icon}</div>
+        <span className="summary-card-label" style={{ color: 'var(--text-muted)' }}>
           {title}
         </span>
       </div>
-      <div className={`text-2xl md:text-3xl font-bold ${valueColors[variant]}`}>
+      <div className={`summary-card-value ${valueColors[variant]}`}>
         {value}
       </div>
       {subtitle && (
-        <div className="text-xs mt-2" style={{ color: 'var(--text-hint)' }}>
+        <div className="summary-card-subtitle" style={{ color: 'var(--text-hint)' }}>
           {subtitle}
         </div>
       )}

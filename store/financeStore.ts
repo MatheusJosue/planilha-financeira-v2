@@ -453,6 +453,70 @@ export const useFinanceStore = create<FinanceStore>((set, get) => ({
     showSuccessToast('Transação adicionada!');
   },
 
+  duplicateNonRecurringTransactionsToNextMonth: async () => {
+    const supabase = getSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      showErrorToast('Usuário não autenticado');
+      return 0;
+    }
+
+    const { transactions, currentMonth, recurringTransactions, monthsData } = get();
+    const [currentYear, currentMonthNumber] = currentMonth.split('-').map(Number);
+    const destinationDate = new Date(currentYear, currentMonthNumber, 1);
+    const destinationMonth = `${destinationDate.getFullYear()}-${String(destinationDate.getMonth() + 1).padStart(2, '0')}`;
+    const lastDestinationDay = new Date(destinationDate.getFullYear(), destinationDate.getMonth() + 1, 0).getDate();
+
+    const isRecurring = (transaction: Transaction) => {
+      if (transaction.recurring_id || transaction.is_predicted) return true;
+      const transactionDay = new Date(`${transaction.date}T00:00:00`).getDate();
+      return recurringTransactions.some((recurring) =>
+        recurring.description === transaction.description &&
+        recurring.type === transaction.type &&
+        recurring.category === transaction.category &&
+        recurring.day_of_month === transactionDay
+      );
+    };
+
+    const sourceTransactions = transactions.filter(
+      (transaction) => transaction.month === currentMonth && !isRecurring(transaction)
+    );
+    if (sourceTransactions.length === 0) return 0;
+
+    const transactionsToInsert = sourceTransactions.map((transaction) => {
+      const originalDay = new Date(`${transaction.date}T00:00:00`).getDate();
+      const destinationDay = Math.min(originalDay, lastDestinationDay);
+      return {
+        user_id: user.id,
+        description: transaction.description,
+        type: transaction.type,
+        category: transaction.category,
+        value: transaction.value,
+        date: `${destinationMonth}-${String(destinationDay).padStart(2, '0')}`,
+        month: destinationMonth,
+        is_paid: false,
+      };
+    });
+
+    const { data, error } = await supabase
+      .from('transactions')
+      .insert(transactionsToInsert)
+      .select();
+    if (error) {
+      console.error('Error duplicating transactions:', error);
+      showErrorToast('Erro ao duplicar transações');
+      return 0;
+    }
+
+    const updatedMonthsData = { ...monthsData };
+    updatedMonthsData[destinationMonth] = {
+      transactions: [...(data || []), ...(updatedMonthsData[destinationMonth]?.transactions || [])],
+    };
+    set({ monthsData: updatedMonthsData });
+    showSuccessToast(`${data?.length || 0} transações duplicadas para o próximo mês!`);
+    return data?.length || 0;
+  },
+
   updateTransaction: async (id, updates) => {
     const supabase = getSupabaseClient();
     const { currentMonth, monthsData } = get();

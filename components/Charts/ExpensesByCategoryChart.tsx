@@ -8,7 +8,6 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts';
 import { useFinanceStore } from '@/store/financeStore';
 import { formatCurrency, formatPercentage } from '@/utils/formatCurrency';
@@ -44,10 +43,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div
-        className="glass-card-static p-3"
-        style={{ minWidth: '150px' }}
-      >
+      <div className="category-chart-tooltip">
         <p className="fw-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
           {data.name}
         </p>

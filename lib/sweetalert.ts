@@ -95,10 +95,16 @@ export const showConfirm = (
     cancelButtonColor: customTheme.cancelButtonColor,
     confirmButtonText: confirmText,
     cancelButtonText: cancelText,
+    reverseButtons: true,
+    buttonsStyling: false,
     customClass: {
-      popup: 'glass-strong',
-      confirmButton: 'btn-gradient',
-      cancelButton: 'btn-glass',
+      popup: 'glass-strong app-alert app-alert-confirm',
+      icon: 'app-alert-icon',
+      title: 'app-alert-title',
+      htmlContainer: 'app-alert-description',
+      actions: 'app-alert-actions',
+      confirmButton: 'btn-gradient app-alert-button',
+      cancelButton: 'btn-glass app-alert-button',
     },
   });
 };
@@ -116,10 +122,16 @@ export const showDeleteConfirm = (itemName: string) => {
     cancelButtonColor: customTheme.cancelButtonColor,
     confirmButtonText: 'Sim, excluir',
     cancelButtonText: 'Cancelar',
+    reverseButtons: true,
+    buttonsStyling: false,
     customClass: {
-      popup: 'glass-strong',
-      confirmButton: 'btn-gradient-danger',
-      cancelButton: 'btn-glass',
+      popup: 'glass-strong app-alert app-alert-delete',
+      icon: 'app-alert-icon',
+      title: 'app-alert-title',
+      htmlContainer: 'app-alert-description',
+      actions: 'app-alert-actions',
+      confirmButton: 'btn-gradient-danger app-alert-button',
+      cancelButton: 'btn-glass app-alert-button',
     },
   });
 };

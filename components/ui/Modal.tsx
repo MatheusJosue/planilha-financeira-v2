@@ -32,11 +32,11 @@ export function GlassModal({
   backdrop = true,
 }: GlassModalProps) {
   const gradients = {
-    primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    success: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-    danger: 'linear-gradient(135deg, #eb3349 0%, #f45c43 100%)',
-    warning: 'linear-gradient(135deg, #f5af19 0%, #f093fb 100%)',
-    info: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    primary: 'var(--gradient-primary)',
+    success: 'var(--gradient-success)',
+    danger: 'var(--gradient-danger)',
+    warning: 'var(--gradient-warning)',
+    info: 'var(--gradient-info)',
   };
 
   return (
@@ -64,6 +64,7 @@ export function GlassModal({
         <button
           type="button"
           onClick={onHide}
+          aria-label="Fechar"
           className="border-0 bg-transparent text-white opacity-80 hover:opacity-100 transition-opacity"
           style={{ fontSize: '1.25rem' }}
         >

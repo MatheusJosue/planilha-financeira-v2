@@ -53,6 +53,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         <Form.Control
           ref={ref}
           id={id}
+          className="input-glass"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}

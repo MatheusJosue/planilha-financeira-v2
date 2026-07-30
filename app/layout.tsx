@@ -14,7 +14,10 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#667eea',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0f0c29' },
+    { media: '(prefers-color-scheme: light)', color: '#f5f7fa' },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
   description: 'Gerencie suas finanças pessoais de forma simples e eficiente',
   keywords: ['finanças', 'planilha', 'controle financeiro', 'orçamento', 'metas'],
   authors: [{ name: 'Planilha Financeira' }],
-  manifest: '/manifest.webmanifest?v=2',
+  manifest: '/manifest.webmanifest?v=3',
   icons: {
     icon: [
       { url: '/sheet-icon.svg', type: 'image/svg+xml' },

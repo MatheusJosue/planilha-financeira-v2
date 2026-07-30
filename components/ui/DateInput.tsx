@@ -50,6 +50,7 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
         <Form.Control
           ref={ref}
           id={id}
+          className="input-glass"
           type="date"
           value={value}
           onChange={(e) => onChange(e.target.value)}

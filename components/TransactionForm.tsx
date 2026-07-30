@@ -154,6 +154,7 @@ export function TransactionForm({
               ? parseInt(formData.total_installments) || undefined
               : undefined,
           is_active: true,
+          is_essential: true,
         });
       } else {
         // Create regular transaction

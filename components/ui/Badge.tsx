@@ -19,13 +19,13 @@ export function Badge({
   icon,
   className = '',
 }: BadgeProps) {
-  const variantClasses = {
-    primary: 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white',
-    success: 'bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white',
-    danger: 'bg-gradient-to-r from-[#eb3349] to-[#f45c43] text-white',
-    warning: 'bg-gradient-to-r from-[#f5af19] to-[#f093fb] text-white',
-    info: 'bg-gradient-to-r from-[#4facfe] to-[#00f2fe] text-white',
-    glass: 'bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]',
+  const variantBackgrounds: Record<Exclude<BadgeProps['variant'], undefined>, string> = {
+    primary: 'var(--gradient-primary)',
+    success: 'var(--gradient-success)',
+    danger: 'var(--gradient-danger)',
+    warning: 'var(--gradient-warning)',
+    info: 'var(--gradient-info)',
+    glass: 'var(--glass-bg)',
   };
 
   const sizeClasses = {
@@ -34,15 +34,20 @@ export function Badge({
     lg: 'px-3 py-1.5 text-base',
   };
 
+  const style: React.CSSProperties =
+    variant === 'glass'
+      ? { background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }
+      : { background: variantBackgrounds[variant], color: 'white' };
+
   return (
     <span
       className={`
         inline-flex items-center gap-1 font-medium
-        ${variantClasses[variant]}
         ${sizeClasses[size]}
         ${pill ? 'rounded-full' : 'rounded-lg'}
         ${className}
       `}
+      style={style}
     >
       {icon && <span className="flex-shrink-0">{icon}</span>}
       {children}

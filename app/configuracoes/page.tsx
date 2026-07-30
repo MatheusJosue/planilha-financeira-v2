@@ -14,7 +14,6 @@ import {
 import { PageLayout } from '@/components/PageLayout';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { GlassButton, IconButton } from '@/components/ui/GlassButton';
-import { GlassTabs } from '@/components/ui/Tabs';
 import { InputField } from '@/components/ui/InputField';
 import { SelectField } from '@/components/ui/SelectField';
 import { useFinanceStore } from '@/store/financeStore';
@@ -38,6 +37,7 @@ export default function ConfiguracoesPage() {
   const [activeTab, setActiveTab] = useState('categorias');
   const [newCategory, setNewCategory] = useState('');
   const [loading, setLoading] = useState(false);
+  const [togglingCategory, setTogglingCategory] = useState<string | null>(null);
 
   // Period settings state
   const [periodEnabled, setPeriodEnabled] = useState(false);
@@ -83,12 +83,22 @@ export default function ConfiguracoesPage() {
   };
 
   const handleToggleCategory = async (category: string) => {
-    if (hiddenDefaultCategories.includes(category)) {
-      await showDefaultCategory(category);
-    } else {
-      await hideDefaultCategory(category);
+    if (togglingCategory) return;
+
+    setTogglingCategory(category);
+    try {
+      if (hiddenDefaultCategories.includes(category)) {
+        await showDefaultCategory(category);
+      } else {
+        await hideDefaultCategory(category);
+      }
+    } finally {
+      setTogglingCategory(null);
     }
   };
+
+  // Keep hidden categories visible here so they can be restored using the eye button.
+  const displayedCategories = Array.from(new Set([...categories, ...hiddenDefaultCategories]));
 
   const handleSignOut = async () => {
     const result = await showConfirm('Sair da conta?', 'Você será desconectado do sistema.');
@@ -144,11 +154,36 @@ export default function ConfiguracoesPage() {
   ];
 
   return (
-    <PageLayout
-      title="Configurações"
-      subtitle="Personalize sua experiência"
-    >
-      <GlassTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} className="mb-4" />
+    <PageLayout className="settings-page">
+      <section className="dashboard-hero settings-hero mb-4">
+        <div className="dashboard-hero-copy">
+          <span className="dashboard-kicker">Preferências</span>
+          <h1>Configurações</h1>
+          <p>Personalize categorias, períodos e os detalhes da sua conta.</p>
+        </div>
+        <div className="settings-hero-profile">
+          <span>{user?.email?.charAt(0).toUpperCase() || 'U'}</span>
+          <div><strong>{user?.email?.split('@')[0] || 'Usuário'}</strong><small>{user?.email}</small></div>
+        </div>
+        <div className="dashboard-hero-orb dashboard-hero-orb-one" />
+        <div className="dashboard-hero-orb dashboard-hero-orb-two" />
+      </section>
+
+      <div className="settings-layout">
+        <nav className="settings-tabs" aria-label="Seções das configurações">
+            {tabs.map((tab) => (
+              <button
+                type="button"
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={activeTab === tab.id ? 'active' : ''}
+                aria-current={activeTab === tab.id ? 'page' : undefined}
+              >
+                {tab.icon}<span>{tab.label}</span>
+              </button>
+            ))}
+        </nav>
+        <section className="settings-content">
 
       {activeTab === 'categorias' && (
         <>
@@ -195,39 +230,29 @@ export default function ConfiguracoesPage() {
               mas suas transações existentes são mantidas.
             </p>
 
-            <div className="d-flex flex-column gap-2">
-              {categories.map((category) => {
+            <div className="settings-category-grid">
+              {displayedCategories.map((category) => {
                 const isHidden = hiddenDefaultCategories.includes(category);
                 return (
                   <div
                     key={category}
-                    className={`
-                      d-flex align-items-center justify-content-between p-3 rounded-3
-                      ${isHidden ? 'opacity-50' : ''}
-                    `}
-                    style={{
-                      background: 'var(--glass-bg)',
-                      border: '1px solid var(--glass-border)',
-                    }}
+                    className={`settings-category-item ${isHidden ? 'is-hidden' : ''}`}
                   >
-                    <div className="d-flex align-items-center gap-3">
-                      <span style={{ fontSize: '1.5rem' }}>
+                    <div className="settings-category-info">
+                      <span className="settings-category-emoji">
                         {CATEGORY_EMOJIS[category] || '📦'}
                       </span>
-                      <span
-                        style={{
-                          color: isHidden ? 'var(--text-muted)' : 'var(--text-primary)',
-                          textDecoration: isHidden ? 'line-through' : 'none',
-                        }}
-                      >
-                        {category}
-                      </span>
+                      <div>
+                        <strong>{category}</strong>
+                        <small>{isHidden ? 'Oculta' : 'Visível'}</small>
+                      </div>
                     </div>
                     <IconButton
                       icon={isHidden ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                       variant={isHidden ? 'glass' : 'primary'}
                       size="sm"
                       onClick={() => handleToggleCategory(category)}
+                      disabled={togglingCategory !== null}
                       tooltip={isHidden ? 'Mostrar categoria' : 'Ocultar categoria'}
                     />
                   </div>
@@ -487,6 +512,8 @@ export default function ConfiguracoesPage() {
           </GlassCard>
         </>
       )}
+        </section>
+      </div>
     </PageLayout>
   );
 }

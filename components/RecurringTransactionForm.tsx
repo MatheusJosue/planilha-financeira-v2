@@ -33,6 +33,7 @@ interface FormData {
   end_date: string;
   total_installments: string;
   is_active: boolean;
+  is_essential: boolean;
 }
 
 const initialFormData: FormData = {
@@ -46,6 +47,7 @@ const initialFormData: FormData = {
   end_date: '',
   total_installments: '',
   is_active: true,
+  is_essential: true,
 };
 
 export function RecurringTransactionForm({
@@ -73,6 +75,7 @@ export function RecurringTransactionForm({
         end_date: recurring.end_date || '',
         total_installments: recurring.total_installments?.toString() || '',
         is_active: recurring.is_active,
+        is_essential: recurring.is_essential,
       };
     }
     return {
@@ -129,6 +132,7 @@ export function RecurringTransactionForm({
               ? parseInt(formData.total_installments) || undefined
               : undefined,
           is_active: formData.is_active,
+          is_essential: formData.is_essential,
         });
       } else {
         await addRecurringTransaction({
@@ -145,6 +149,7 @@ export function RecurringTransactionForm({
               ? parseInt(formData.total_installments) || undefined
               : undefined,
           is_active: true,
+          is_essential: formData.is_essential,
         });
       }
 
@@ -273,6 +278,30 @@ export function RecurringTransactionForm({
             />
           </Col>
         </Row>
+
+        {/* Essential Toggle */}
+        <div
+          className="p-3 rounded-3 mb-3"
+          style={{
+            background: 'var(--glass-bg)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          <Form.Check
+            type="switch"
+            id="essential-switch"
+            label={
+              <span style={{ color: 'var(--text-secondary)' }}>
+                {formData.is_essential ? 'Gasto essencial' : 'Gasto supérfluo'}
+              </span>
+            }
+            checked={formData.is_essential}
+            onChange={(e) => handleChange('is_essential', e.target.checked)}
+          />
+          <small style={{ color: 'var(--text-hint)' }}>
+            Essencial: você não pode deixar de pagar (aluguel, luz, água...). Desmarque para gastos que dariam pra cortar (streaming, assinaturas, etc).
+          </small>
+        </div>
 
         {/* Recurrence Settings */}
         <div

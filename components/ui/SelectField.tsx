@@ -56,6 +56,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
         <Form.Select
           ref={ref}
           id={id}
+          className="select-glass"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}

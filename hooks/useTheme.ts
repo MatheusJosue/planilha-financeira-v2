@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { applyAppTheme, type AppTheme } from '@/lib/theme';
 
-type Theme = 'dark' | 'light';
+type Theme = AppTheme;
 
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>('dark');
@@ -15,20 +16,20 @@ export function useTheme() {
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     if (savedTheme) {
       setThemeState(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      applyAppTheme(savedTheme);
     } else {
       // Check system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const defaultTheme = prefersDark ? 'dark' : 'light';
       setThemeState(defaultTheme);
-      document.documentElement.setAttribute('data-theme', defaultTheme);
+      applyAppTheme(defaultTheme);
     }
   }, []);
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    applyAppTheme(newTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {

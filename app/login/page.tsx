@@ -1,16 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Container, Row, Col, Form, Alert } from 'react-bootstrap';
-import { FiMail, FiLock, FiUser, FiLogIn, FiUserPlus } from 'react-icons/fi';
+import { FiMail, FiLock, FiLogIn, FiUserPlus, FiPieChart, FiShield, FiTrendingUp } from 'react-icons/fi';
 import { useAuth } from '@/hooks/useAuth';
 import { GlassButton } from '@/components/ui/GlassButton';
 import { GlassInput } from '@/components/ui/GlassInput';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
@@ -71,10 +71,27 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center p-4"
       style={{ background: 'var(--bg-gradient)' }}
     >
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
-            <div className="glass-card p-4 p-md-5">
+      <Container className="auth-shell">
+        <Row className="justify-content-center g-0 auth-card">
+          <Col lg={5} className="d-none d-lg-flex auth-showcase">
+            <div className="auth-showcase-content">
+              <span className="auth-eyebrow">Finanças sem complicação</span>
+              <h2>Clareza para decidir melhor todos os meses.</h2>
+              <p>
+                Organize movimentações, acompanhe metas e antecipe o impacto das
+                contas recorrentes em um só lugar.
+              </p>
+              <div className="auth-benefits">
+                <div><FiPieChart /><span>Visão completa do seu orçamento</span></div>
+                <div><FiTrendingUp /><span>Projeções para os próximos meses</span></div>
+                <div><FiShield /><span>Seus dados separados e protegidos</span></div>
+              </div>
+            </div>
+            <div className="auth-orb auth-orb-one" />
+            <div className="auth-orb auth-orb-two" />
+          </Col>
+          <Col xs={12} lg={7} className="auth-form-panel">
+            <div className="p-4 p-md-5 auth-form-content">
               {/* Logo/Title */}
               <div className="text-center mb-5">
                 <div
@@ -216,12 +233,20 @@ export default function LoginPage() {
             </div>
 
             {/* Footer */}
-            <p className="text-center mt-4" style={{ color: 'var(--text-hint)', fontSize: '0.875rem' }}>
+            <p className="text-center mt-4 auth-footer" style={{ color: 'var(--text-hint)', fontSize: '0.875rem' }}>
               Planilha Financeira v2.0 • {new Date().getFullYear()}
             </p>
           </Col>
         </Row>
       </Container>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" style={{ background: 'var(--bg-gradient)' }} />}>
+      <LoginContent />
+    </Suspense>
   );
 }

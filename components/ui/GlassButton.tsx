@@ -126,6 +126,7 @@ export function IconButton({
     <button
       className={`${variantClasses[variant]} ${className}`}
       title={tooltip}
+      aria-label={tooltip}
       style={{
         ...sizeStyles[size],
         display: 'inline-flex',
@@ -154,6 +155,8 @@ export function FloatingActionButton({
   icon,
   position = 'bottom-right',
   className = '',
+  title,
+  'aria-label': ariaLabel,
   ...props
 }: FABProps) {
   const positionClasses = {
@@ -169,6 +172,8 @@ export function FloatingActionButton({
         fixed ${positionClasses[position]}
         ${className}
       `}
+      title={title}
+      aria-label={ariaLabel || title || 'Adicionar'}
       {...props}
     >
       {icon}
