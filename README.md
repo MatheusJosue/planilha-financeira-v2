@@ -2,6 +2,8 @@
 
 > Aplicativo de controle financeiro pessoal com dashboard, transações recorrentes automáticas e relatórios em PDF.
 
+🔗 **Demo:** https://planilha-v2.vercel.app
+
 ## ✨ Funcionalidades
 
 - **Dashboard** com saldo, receitas e despesas em tempo real
